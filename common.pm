@@ -193,7 +193,7 @@ trig {
 #Stamina
 trig {
   $U::stamina = "\003CSt";
-} '^A feeling of increased power courses through your body\.$', '1000n:SPELLS_MONITORING';
+} '^(A feeling of increased power courses through your body\.)|(A feeling of tremendous power courses through your body!)$', '1000n:SPELLS_MONITORING';
 
 trig {
   $U::stamina = "\003ASt";
@@ -328,7 +328,6 @@ trig {
   sendl("|\r\nentrench");	
 } '^You fail in your attempt to dig in\\.$',"2000n:GROUP";
 
-
 trig {
   if (($1 eq $U::leader) and (($2 eq $U::prefix." ") or ($U::prefix eq ""))) { sendl("rem chopper\r\ndrop all.chopper"); }
 } '^(\w+) -- \'([\s\S]*)drop choppers\'$',"2000n:GROUP";
@@ -400,19 +399,26 @@ trig {
   if ($1 eq $U::tank) { sendl("warcry $2"); }
 } '^(\w+) yells \'(.+)\'$',"2000n:GROUP";
 
-
-
-
 #modnii track
-alias { $U::trackmob=$_[0];sendl("track $U::trackmob") } tra;
-alias { $U::trackmob=$U::target;sendl("track $U::trackmob") } trat;
+alias { 
+  $U::trackmob=$_[0];
+  sendl("track $U::trackmob") 
+} tra;
+
+alias {
+  $U::trackmob=$U::target;
+  sendl("track $U::trackmob")
+} trat;
 
 trig {
-  sendl("$1");sendl("track $U::trackmob");
+  sendl("$1");
+  sendl("track $U::trackmob");
 } 'lead (\w+)ward\.$', "2000n:SWALK";
 
 #PINGER
-hook {Pinger::ping_proceed; } "tick";
+hook {
+  Pinger::ping_proceed;
+} "tick";
 
 sub CMD::cmd_pingerhelp {
   echo("/pingtome");
@@ -425,27 +431,89 @@ sub CMD::cmd_pingerhelp {
   echo("/showmobname");
 };
 
-sub CMD::cmd_pingtome { Pinger::ping_to_me; };
-sub CMD::cmd_pingtogroup { Pinger::ping_to_group; };
-sub CMD::cmd_showstatus { Pinger::show_status; };
-sub CMD::cmd_addmob { Pinger::add_mob(@_); };
-sub CMD::cmd_showlist { Pinger::show_list(); };
-sub CMD::cmd_showlistback { Pinger::show_list_background() };
-sub CMD::cmd_remmobname { Pinger::del_mob_by_name(@_); };
-sub CMD::cmd_showmobname { Pinger::show_mob_name(@_); };
+sub CMD::cmd_pingtome {
+  Pinger::ping_to_me;
+};
+
+sub CMD::cmd_pingtogroup {
+  Pinger::ping_to_group;
+};
+
+sub CMD::cmd_showstatus {
+  Pinger::show_status;
+};
+
+sub CMD::cmd_addmob {
+  Pinger::add_mob(@_);
+};
+
+sub CMD::cmd_showlist {
+  Pinger::show_list();
+};
+
+sub CMD::cmd_showlistback {
+  Pinger::show_list_background()
+};
+
+sub CMD::cmd_remmobname {
+  Pinger::del_mob_by_name(@_);
+};
+
+sub CMD::cmd_showmobname {
+  Pinger::show_mob_name(@_);
+};
 
 #Тикер
 #Погода
-trig {CMD::cmd_tickset;Pinger::ping_proceed;} '^It starts to rain', "1000n:TICK";
-trig {CMD::cmd_tickset;Pinger::ping_proceed;} '^The rain stopped', "1000n:TICK";
-trig {CMD::cmd_tickset;Pinger::ping_proceed;} '^The sky is getting', "1000n:TICK";
-trig {CMD::cmd_tickset;Pinger::ping_proceed;} '^The sun slowly', "1000n:TICK";
-trig {CMD::cmd_tickset;Pinger::ping_proceed;} '^The night has begun', "1000n:TICK";
-trig {CMD::cmd_tickset;Pinger::ping_proceed;} '^The sun rises', "1000n:TICK";
-trig {CMD::cmd_tickset;Pinger::ping_proceed;} '^The clouds disappear', "1000n:TICK";
-trig {CMD::cmd_tickset;Pinger::ping_proceed;} '^Lightning starts', "1000n:TICK";
-trig {CMD::cmd_tickset;Pinger::ping_proceed;} '^The day has begun', "1000n:TICK";
-trig {CMD::cmd_tickset;Pinger::ping_proceed;} '^The lightning has stopped', "1000n:TICK";
+trig {
+  CMD::cmd_tickset;
+  Pinger::ping_proceed;
+} '^It starts to rain', "1000n:TICK";
+
+trig {
+  CMD::cmd_tickset;
+  Pinger::ping_proceed;
+} '^The rain stopped', "1000n:TICK";
+
+trig {
+  CMD::cmd_tickset;
+  Pinger::ping_proceed;
+} '^The sky is getting', "1000n:TICK";
+
+trig {
+  CMD::cmd_tickset;
+  Pinger::ping_proceed;
+} '^The sun slowly', "1000n:TICK";
+
+trig {
+  CMD::cmd_tickset;
+  Pinger::ping_proceed;
+} '^The night has begun', "1000n:TICK";
+
+trig {
+  CMD::cmd_tickset;
+  Pinger::ping_proceed;
+} '^The sun rises', "1000n:TICK";
+
+trig {
+  CMD::cmd_tickset;
+  Pinger::ping_proceed;
+} '^The clouds disappear', "1000n:TICK";
+
+trig {
+  CMD::cmd_tickset;
+  Pinger::ping_proceed;
+} '^Lightning starts', "1000n:TICK";
+
+trig {
+  CMD::cmd_tickset;
+  Pinger::ping_proceed;
+} '^The day has begun', "1000n:TICK";
+
+trig {
+  CMD::cmd_tickset;
+  Pinger::ping_proceed;
+} '^The lightning has stopped', "1000n:TICK";
 
 trig {
   if ($U::sleeping eq 3) {
@@ -457,193 +525,515 @@ trig {
 } '^You are thirsty', "1000n:COMM";
 
 trig {
-  if ($U::sleeping eq 3) { sendl ("wake\r\nstand") };
+  if ($U::sleeping eq 3) {
+    sendl ("wake\r\nstand")
+  };
 } '^As the room closes up around you', "1000n:COMM";
 
 #Триггеры на вставание\сидение :)
 trig {
- $U::sleeping = 0;
+  $U::sleeping = 0;
 } '^You stand up\\.', "1000n:COMM";
 
 trig {
- $U::sleeping = 0;
+  $U::sleeping = 0;
 } '^You stop resting, and stand up\\.', "1000n:COMM";
 
 trig {
- $U::sleeping = 1;
+  $U::sleeping = 1;
 } '^You wake, and sit up\\.', "1000n:COMM";
 
 trig {
- $U::sleeping = 2;
+  $U::sleeping = 2;
 } '^You sit down and rest your tired bones\\.', "1000n:COMM";
 
 trig {
- $U::sleeping = 3;
+  $U::sleeping = 3;
 } '^You go to sleep\\.', "1000n:COMM";
 
-alias {sendl("wake\r\nstand");} "was";
+alias {
+  sendl("wake\r\nstand");
+} "was";
 
 alias {
   if ($_[0] =~ /^([a-zA-Z0-9\.\-]+)$/) {
     CMD::cmd_target($_[0]);sendl("deathgrip $U::target");
-  } else {sendl("deathgrip $U::target");}
+  } else {
+    sendl("deathgrip $U::target");
+  }
 } "dd";
 
 alias {
   if ($_[0] =~ /^([a-zA-Z0-9\.\-]+)$/) {
     CMD::cmd_target($_[0]);sendl("wraithtouch $U::target");
-  } else {sendl("wraithtouch $U::target");}
+  } else {
+    sendl("wraithtouch $U::target");
+  }
 } "wt";
 
 alias {
   if ($_[0] ne "") {
     sendl("strike $_[0]");
-  } else {sendl("strike")}
+  } else {
+    sendl("strike")
+  }
 } "ss";
 
 alias {
-	   sendl("strike $U::target")
+  sendl("strike $U::target")
 } "sst";
 
 alias {
-       sendl("backstab $U::target")
+  sendl("backstab $U::target")
 } "bt";
 
-alias {sendl("look $U::target");} "lt";
-alias {sendl("kill $U::target");} "kt";
+alias {
+  sendl("look $U::target");
+} "lt";
+alias {
+  sendl("kill $U::target");
+} "kt";
 
 #COMBAT
-alias { sendl("cast 'fireball' @_[0]") } "fb";
-alias { sendl("cast 'fireball' $U::target") } "fbt";
-alias { sendl("cast 'dispel evil' @_[0]") } "de";
-alias { sendl("cast 'dispel evil' $U::target") } "det";
-alias { sendl("cast 'acid blast' @_[0]") } "ab";
-alias { sendl("cast 'acid blast' $U::target") } "abt";
-alias { sendl("cast 'firewind' @_[0]") } "fw";
-alias { sendl("cast 'firewind' $U::target") } "fwt";
-alias { sendl("cast 'web' @_[0]") } "web";
-alias { sendl("cast 'web' $U::target") } "webt";
-alias { sendl("cast 'disi' @_[0]") } "disi";
-alias { sendl("cast 'disi' $U::target") } "dist";
-alias { sendl("cast 'ice ray' @_[0]") } "ir";
-alias { sendl("cast 'ice ray' $U::target") } "irt";
-alias { sendl("cast 'ice strom'") } "is";
-alias { sendl("cast 'blindness' @_[0]") } "bld";
-alias { sendl("cast 'blindness' $U::target") } "bldt";
-alias { sendl("cast 'curse' @_[0]") } "cs";
-alias { sendl("cast 'curse' $U::target") } "cst";
-alias { sendl("cast 'demon bind' @_[0]") } "db";
-alias { sendl("cast 'demon bind' $U::target") } "dbt";
-alias { sendl("cast 'demon touch' @_[0]") } "dt";
-alias { sendl("cast 'demon touch' $U::target") } "dtt";
-alias { sendl("cast 'demon touch' @_[0]") } "dt";
-alias { sendl("cast 'demon touch' $U::target") } "dtt";
-alias { sendl("cast 'weaken' @_[0]") } "wk";
-alias { sendl("cast 'weaken' $U::target") } "wkt";
-alias { sendl("cast 'faerie fire' $U::target") } "ff";
+alias {
+  sendl("cast 'fireball' @_[0]")
+} "fb";
+
+alias {
+  sendl("cast 'fireball' $U::target")
+} "fbt";
+
+alias {
+  sendl("cast 'dispel evil' @_[0]")
+} "de";
+
+alias {
+  sendl("cast 'dispel evil' $U::target")
+} "det";
+
+alias {
+  sendl("cast 'acid blast' @_[0]")
+} "ab";
+
+alias {
+  sendl("cast 'acid blast' $U::target")
+} "abt";
+
+alias {
+  sendl("cast 'firewind' @_[0]")
+} "fw";
+
+alias {
+  sendl("cast 'firewind' $U::target")
+} "fwt";
+
+alias {
+  sendl("cast 'web' @_[0]")
+} "web";
+
+alias {
+  sendl("cast 'web' $U::target")
+} "webt";
+
+alias {
+  sendl("cast 'disi' @_[0]")
+} "disi";
+
+alias {
+  sendl("cast 'disi' $U::target")
+} "dist";
+
+alias {
+  sendl("cast 'ice ray' @_[0]")
+} "ir";
+
+alias {
+  sendl("cast 'ice ray' $U::target")
+} "irt";
+
+alias {
+  sendl("cast 'ice strom'")
+} "is";
+
+alias {
+  sendl("cast 'blindness' @_[0]")
+} "bld";
+
+alias {
+  sendl("cast 'blindness' $U::target")
+} "bldt";
+
+alias {
+  sendl("cast 'curse' @_[0]")
+} "cs";
+
+alias {
+  sendl("cast 'curse' $U::target")
+} "cst";
+
+alias {
+  sendl("cast 'demon bind' @_[0]")
+} "db";
+
+alias {
+  sendl("cast 'demon bind' $U::target")
+} "dbt";
+
+alias {
+  sendl("cast 'demon touch' @_[0]")
+} "dt";
+
+alias {
+  sendl("cast 'demon touch' $U::target")
+} "dtt";
+
+alias {
+  sendl("cast 'weaken' @_[0]")
+} "wk";
+
+alias {
+  sendl("cast 'weaken' $U::target")
+} "wkt";
+
+alias {
+  sendl("cast 'faerie fire' $U::target")
+} "ff";
 
 #ENCHANT
-alias { sendl("cast 'spell shield' @_[0] 40") } "sshield";
-alias { sendl("cast 'spectral shield'") } "spectral";
-alias { sendl("cast 'wraithform'") } "wra";
-alias { sendl("cast 'resist web'") } "rsw";
+alias {
+  sendl("cast 'spell shield' @_[0] 40")
+} "sshield";
 
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'infravision' $victim"); } "infra";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'fly' $victim");} "fly";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast '$Char::bless' $victim");} "bl";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast '$Char::armor' $victim");} "stone";
+alias {
+  sendl("cast 'spectral shield'")
+} "spectral";
+
+alias {
+  sendl("cast 'wraithform'")
+} "wra";
+
+alias {
+  sendl("cast 'resist web'")
+} "rsw";
+
+alias {
+  sendl("cast 'resist fire'")
+} "rsf";
+
+alias {
+  sendl("cast 'resist cold'")
+} "rsc";
+
+alias {
+  sendl("cast 'resist poison'")
+} "rsp";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'infravision' $victim");
+} "infra";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'fly' $victim");
+} "fly";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast '$Char::bless' $victim");
+} "bl";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast '$Char::armor' $victim");
+} "stone";
+
 alias {
   sendl("cast 'improved haste'");
 } "ihaste";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast '$Char::lite' $victim"); } "lite";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'wall' $victim"); } "wall";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'dark cloak' $victim"); } "cloak";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'invisibility' $victim"); } "invis";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'water breathing' $victim"); } "wb";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'darkness' $victim"); } "dark";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'regeneration' $victim"); } "rg";
 
-alias { sendl("cast '$Char::flui' $Char::my_name") } "flui";
-alias { sendl("cast 'glamour' $Char::my_name") } "glamour";
-alias { sendl("cast 'undead visage' $Char::my_name") } "visage";
-alias { sendl("cast 'detect magic' $Char::my_name") } "dm";
-alias { sendl("cast 'detect evil' $Char::my_name") } "dev";
-alias { sendl("cast 'detect good' $Char::my_name") } "deg";
-alias { sendl("cast 'detect invis' $Char::my_name") } "di";
-alias { sendl("cast 'sense life' $Char::my_name") } "dl";
-alias { sendl("cast 'darksight' $Char::my_name") } "ds";
-alias { sendl("cast 'protection from evil' $Char::my_name") } "pfe";
-alias { sendl("cast 'str'") } "str";
-alias { sendl("cast 'unholy str'") } "ustr";
-alias { sendl("cast 'aerial servant'") } "kom";
-alias { sendl("cast 'mindbar'") } "mind";
-alias { sendl("cast 'silence' @_[0]") } "sil";
-alias { sendl("cast 'feast'") } "feast";
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast '$Char::lite' $victim");
+} "lite";
 
-alias { sendl("cast 'locate object' @_[0]") } "locate";
-alias { sendl("cast 'sleep' @_[0]") } "sleep";
-alias { sendl("cast 'dark mace'") } "mace";
-alias { sendl("cast 'cheat death'") } "cheat";
-alias { sendl("cast 'familiar' @_[0]") } "fam";
-alias { sendl("cast 'force field' @_[0]") } "field";
-alias { sendl("cast 'gate' @_[0]") } "gate";
-alias { sendl("cast 'passage' @_[0]") } "passage";
-alias { sendl("cast 'lloyds beacon' @_[0]") } "llb";
-alias { sendl("cast 'raise dead' @_[0]") } "raise";
-alias { sendl("cast 'vision' @_[0]") } "vis";
-alias { sendl("cast 'word of recall'") } "wrr";
-alias { sendl("cast 'create food'\nget food\neat food") } "cfood";
-alias { sendl("cast 'create water' $Char::water_container\ndri water") } "cwater";
-alias { sendl("cast 'summon undead' @_[0]") } "call";
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'wall' $victim");
+} "wall";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'dark cloak' $victim");
+} "cloak";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'invisibility' $victim");
+} "invis";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'water breathing' $victim");
+} "wb";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'darkness' $victim");
+} "dark";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'regeneration' $victim");
+} "rg";
+  
+alias {
+  sendl("cast '$Char::flui' $Char::my_name")
+} "flui";
+
+alias {
+  sendl("cast 'glamour' $Char::my_name")
+} "glamour";
+
+alias {
+  sendl("cast 'undead visage' $Char::my_name")
+} "visage";
+
+alias {
+  sendl("cast 'avatar sight'")
+} "as";
+
+alias {
+  sendl("cast 'detect magic' $Char::my_name")
+} "dm";
+
+alias {
+  sendl("cast 'detect evil' $Char::my_name")
+} "dev";
+
+alias {
+  sendl("cast 'detect good' $Char::my_name")
+} "deg";
+
+alias {
+  sendl("cast 'detect invis' $Char::my_name")
+} "di";
+
+alias {
+  sendl("cast 'sense life' $Char::my_name")
+} "dl";
+
+alias {
+  sendl("cast 'darksight' $Char::my_name")
+} "ds";
+
+alias {
+  sendl("cast 'protection from evil' $Char::my_name")
+} "pfe";
+
+alias {
+  sendl("cast 'aerial servant'")
+} "kom";
+
+alias {
+  sendl("cast 'mindbar'")
+} "mind";
+
+alias {
+  sendl("cast 'silence' @_[0]")
+} "sil";
+
+alias {
+  sendl("cast 'feast'")
+} "feast";
+
+alias {
+  sendl("cast 'locate object' @_[0]")
+} "locate";
+
+alias {
+  sendl("cast 'sleep' @_[0]")
+} "sleep";
+
+alias {
+  sendl("cast 'dark mace'")
+} "mace";
+
+alias {
+  sendl("cast 'cheat death'")
+} "cheat";
+
+alias {
+  sendl("cast 'familiar' @_[0]")
+} "fam";
+
+alias {
+  sendl("cast 'force field' @_[0]")
+} "field";
+
+alias {
+  sendl("cast 'gate' @_[0]")
+} "gate";
+
+alias {
+  sendl("cast 'passage' set")
+} "pss";
+
+alias {
+  sendl("cast 'passage' ret")
+} "psr";
+
+alias {
+  sendl("cast 'passage' loc")
+} "psl";
+
+alias {
+  sendl("cast 'lloyds beacon' set")
+} "lbs";
+
+alias {
+  sendl("cast 'lloyds beacon' ret")
+} "lbr";
+
+alias {
+  sendl("cast 'lloyds beacon' loc")
+} "lbl";
+
+alias {
+  sendl("cast 'raise dead' @_[0]")
+} "raise";
+
+alias {
+  sendl("cast 'vision' @_[0]")
+} "vis";
+
+alias {
+  sendl("cast 'word of recall'")
+} "wrr";
+
+alias {
+  sendl("cast 'create food'\nget food\neat food")
+} "cfood";
+
+alias {
+  sendl("cast 'create water' $Char::water_container\ndri water")
+} "cwater";
+
+alias {
+  sendl("cast 'summon undead' @_[0]")
+} "call";
+
+alias {
+  sendl("cast 'call fol'")
+} "callfol";
+
 #HEAL AND REMOVE EFFECTS
-alias { if (@_[0] ne "") { sendl("cast 'dispel magic' @_[0]"); } } "dism";
-alias { sendl("cast 'dispel magic' $U::target") } "dismt";
-alias { sendl("cast 'cure blind' @_[0]") } "cblind";
+alias {
+  if (@_[0] ne "") {
+    sendl("cast 'dispel magic' @_[0]");
+  }
+} "dism";
 
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'greater heal' $victim");} "gh";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'heal' $victim");} "h";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'restoration' $victim");} "rt";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'refresh' $victim");} "refresh";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'remove curse' $victim");} "rcurse";
-alias { $victim = $Char::my_name;
-  if (@_[0] ne "") { $victim = @_[0]; };
-  sendl("cast 'remove poison' $victim");} "rpoison";
+alias {
+  sendl("cast 'dispel magic' $U::target")
+} "dismt";
 
-alias { sendl("cast 'greater heal' $U::tank") } "ght";
-alias { sendl("cast 'heal' $U::tank") } "ht";
-alias { sendl("cast 'restoration' $U::tank") } "rtt";
+alias {
+  sendl("cast 'cure blind' @_[0]")
+} "cblind";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'greater heal' $victim");
+} "gh";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'heal' $victim");
+} "h";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'restoration' $victim");
+} "rt";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'refresh' $victim");
+} "refresh";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'remove curse' $victim");
+} "rcurse";
+
+alias {
+  $victim = $Char::my_name;
+  if (@_[0] ne "") {
+    $victim = @_[0];
+  };
+  sendl("cast 'remove poison' $victim");
+} "rpoison";
+
+alias {
+  sendl("cast 'greater heal' $U::tank")
+} "ght";
+
+alias {
+  sendl("cast 'heal' $U::tank")
+} "ht";
+
+alias {
+  sendl("cast 'restoration' $U::tank")
+} "rtt";
 
 alias {
   if ($_[0] =~ /^(\d+)\.$/) {
@@ -690,6 +1080,7 @@ alias  {
     sendl("sing 'march of the heroes'")
   }
 } "march";
+
 #fare thee well
 alias  {
   if ($Char::bard_prime) {
@@ -698,6 +1089,7 @@ alias  {
     sendl("sing 'dreams of the castle'")
   }
 } "dreams";
+
 alias  {
   if ($Char::bard_prime) {
     sendl("play 'gods of war'");
@@ -723,9 +1115,13 @@ alias {
   };
 } "ofa";
 
-alias { sendl("order followers @_"); } "of";
+alias {
+  sendl("order followers @_");
+} "of";
 
-alias { sendl("order followers flee"); } "off";
+alias {
+  sendl("order followers flee");
+} "off";
 
 trig {
  sendl("strike");
@@ -742,6 +1138,5 @@ trig {
 alias {
   sendl("cast 'knock' @_[0] @_[1]\r\n\ope @_[0] @_[1]");
 } "knock";
-
 
 MUD::conn "game.slothmud.org", 6101;
